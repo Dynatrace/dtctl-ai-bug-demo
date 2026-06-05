@@ -872,14 +872,13 @@ document.addEventListener('DOMContentLoaded', function() {
 <h3 id="enable-live-debugger">Enable Live Debugger<a class="headerlink" href="#enable-live-debugger" title="Permanent link">#</a></h3>
 <p>In your Dynatrace tenant, make sure the <a href="https://docs.dynatrace.com/docs/observe/application-observability/live-debugger">Live Debugger</a> is enabled.</p>
 <h3 id="configure-openpipeline">Configure OpenPipeline<a class="headerlink" href="#configure-openpipeline" title="Permanent link">#</a></h3>
-<p>Create a new Pipeline using a DQL Processor. Create a matching condition that matches error events from the <code>arc-store</code> namespace or the arc-backend container.</p>
+<p>Import the pipeline in the project under <code>Dynatrace/Arc Backend Exception-Pipeline.json</code>.</p>
+<p>This will create a new Pipeline triggering a Davis Event. It's created with a matching condition that matches error events from the <code>arc-backend</code> container.</p>
 <p>For example:
 <div class="highlight"><pre><span></span><code>matchesPhrase<span class="o">(</span>k8s.container.name,<span class="w"> </span><span class="s2">&quot;arc-backend&quot;</span><span class="o">)</span>
 and
-matchesPhrase<span class="o">(</span>content,<span class="w"> </span><span class="s2">&quot;NullPointerException&quot;</span><span class="o">)</span>
+matchesPhrase<span class="o">(</span>content,<span class="w"> </span><span class="s2">&quot;*Exception&quot;</span><span class="o">)</span>
 </code></pre></div></p>
-<p>Use a DQL processor defition like <code>fieldsAdd alertme = "true"</code>.</p>
-<p>Create a Davis event matching the <code>alertme == "true"</code> with event.type = <code>ERROR_EVENT</code>.</p>
 <p>Finally create a <code>Dynamic Route</code> with the same matching condition from above that triggers the pipeline you just created.</p>
 <h3 id="create-a-workflow">Create a Workflow<a class="headerlink" href="#create-a-workflow" title="Permanent link">#</a></h3>
 <p>Create a Dynatrace Workflow that:</p>
