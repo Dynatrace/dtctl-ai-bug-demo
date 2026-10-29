@@ -1,12 +1,18 @@
+# Supported Node.js (copied from the official image; Debian apt ships EOL Node 20).
+FROM node:24-slim AS node
+
 FROM python:3.11-slim
+
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -s ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 
 # Install system dependencies including gh CLI
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
     git \
-    nodejs \
-    npm \
     && mkdir -p /usr/share/keyrings \
     && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
        | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
