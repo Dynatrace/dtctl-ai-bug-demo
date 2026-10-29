@@ -26,12 +26,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Compute image name
+        id: image
+        run: echo "name=ghcr.io/$(echo "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')/dtctl-agent:latest" >> "$GITHUB_OUTPUT"
+
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
           context: .
           file: agent/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/dtctl-agent:latest
+          tags: ${{ steps.image.outputs.name }}
           secrets: |
             GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}

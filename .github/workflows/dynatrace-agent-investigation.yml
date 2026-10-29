@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: ghcr.io/joshdynatrace/dtctl-agent:latest
+      image: ghcr.io/dynatrace/dtctl-agent:latest
 
     env:
       PYTHONUNBUFFERED: "1"
